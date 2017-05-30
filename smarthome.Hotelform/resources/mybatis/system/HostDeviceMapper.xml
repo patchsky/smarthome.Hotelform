@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="HostDeviceMapper">
+	
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into KL_HOSTDEVICE(
+			DEVICE_CODE,	
+			GUEST_ROOM,	
+			DEVICE_TYPE,
+			NICK_NAME,
+			DEVICE_ADDRESS,
+			HOSTDEVICE_ID
+		) values (
+			#{DEVICE_CODE},	
+			#{GUEST_ROOM},	
+			#{DEVICE_TYPE},	
+			#{NICK_NAME},	
+			#{DEVICE_ADDRESS},	
+			#{HOSTDEVICE_ID}
+		)
+	</insert>
+	
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from KL_HOSTDEVICE
+		where 
+			HOSTDEVICE_ID = #{HOSTDEVICE_ID}
+	</delete>
+	
+	<!-- 删除-->
+	<delete id="deleteByDeviceCode" parameterType="java.util.Map">
+		delete from KL_HOSTDEVICE
+		where 
+			DEVICE_CODE = #{DEVICE_CODE}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update  KL_HOSTDEVICE
+			set 
+				DEVICE_CODE = #{DEVICE_CODE},
+				GUEST_ROOM = #{GUEST_ROOM},
+				DEVICE_TYPE = #{DEVICE_TYPE},
+				NICK_NAME = #{NICK_NAME},
+				DEVICE_ADDRESS = #{DEVICE_ADDRESS},
+			HOSTDEVICE_ID = HOSTDEVICE_ID
+			where 
+				HOSTDEVICE_ID = #{HOSTDEVICE_ID}
+	</update>
+	
+	<!-- 修改 -->
+	<update id="editDeviceState" parameterType="java.util.Map">
+		update  KL_HOSTDEVICE
+			set 
+				STATE = #{STATE}
+			where 
+				DEVICE_ADDRESS = #{DEVICE_ADDRESS}
+	</update>
+	
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+			DEVICE_CODE,	
+			GUEST_ROOM,	
+			DEVICE_TYPE,
+			NICK_NAME,	
+			DEVICE_ADDRESS,	
+			HOSTDEVICE_ID
+		from 
+			KL_HOSTDEVICE
+		where 
+			HOSTDEVICE_ID = #{HOSTDEVICE_ID}
+	</select>
+	
+	<!-- 通过地址码获取数据 -->
+	<select id="findByDeviceAddress" parameterType="java.lang.String" resultType="pd">
+		select 
+			DEVICE_CODE,	
+			GUEST_ROOM,	
+			DEVICE_TYPE,
+			NICK_NAME,	
+			DEVICE_ADDRESS,	
+			HOSTDEVICE_ID
+		from 
+			KL_HOSTDEVICE
+		where 
+			DEVICE_ADDRESS = #{DEVICE_ADDRESS}
+	</select>
+	
+	<!-- 通过主机序列号获取数据 -->
+	<select id="findByDeviceCode" parameterType="java.lang.String" resultType="pd">
+		select 
+			DEVICE_CODE,	
+			GUEST_ROOM,	
+			DEVICE_TYPE,
+			NICK_NAME,	
+			DEVICE_ADDRESS,	
+			HOSTDEVICE_ID
+		from 
+			KL_HOSTDEVICE
+		where 
+			DEVICE_ADDRESS = #{DEVICE_ADDRESS}
+	</select>
+	
+	<!-- 通过房间获取设备数据 -->
+	<select id="findByRoom" parameterType="pd" resultType="pd">
+		
+			select 
+			DEVICE_CODE,	
+			GUEST_ROOM,	
+			DEVICE_TYPE,
+			NICK_NAME,	
+			DEVICE_ADDRESS,	
+			HOSTDEVICE_ID
+		from 
+			KL_HOSTDEVICE
+		where 
+			GUEST_ROOM = #{GUEST_ROOM}  and  DEVICE_TYPE = '1' or DEVICE_TYPE = '2'
+			order by DEVICE_TYPE asc ,DEVICE_ADDRESS asc
+			
+	</select>
+	<!-- 通过房间获取设备数据 -->
+	<select id="getAll" parameterType="pd" resultType="pd">
+		
+			select 
+			DEVICE_CODE,	
+			GUEST_ROOM,	
+			DEVICE_TYPE,
+			NICK_NAME,	
+			DEVICE_ADDRESS,	
+			HOSTDEVICE_ID
+		from 
+			KL_HOSTDEVICE
+		where 
+			GUEST_ROOM = #{GUEST_ROOM}
+			order by DEVICE_TYPE asc ,DEVICE_ADDRESS asc
+			
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+				a.DEVICE_CODE,
+				a.GUEST_ROOM,	
+				a.DEVICE_TYPE,
+				a.DEVICE_ADDRESS,
+				a.STATE,
+				a.NICK_NAME,
+				a.HOSTDEVICE_ID
+		from 
+				KL_HOSTDEVICE a where 1=1
+				<if test="pd.GUEST_ROOM != null and pd.GUEST_ROOM != ''"><!-- 角色检索 -->
+					and a.GUEST_ROOM=#{pd.GUEST_ROOM} 
+				</if>
+				order by DEVICE_TYPE asc ,DEVICE_ADDRESS asc
+		
+	</select>
+	
+	
+	<!-- 列表 -->
+	<select id="datalistPages" parameterType="page" resultType="pd">
+		select
+				a.DEVICE_CODE,	
+				a.GUEST_ROOM,	
+				a.DEVICE_TYPE,
+				a.NICK_NAME,	
+				a.DEVICE_ADDRESS,
+				a.STATE,
+				a.HOSTDEVICE_ID
+		from 
+				KL_HOSTDEVICE a where 1=1
+				<if test="pd.GUEST_ROOM != null and pd.GUEST_ROOM != ''"><!-- 角色检索 -->
+					and a.GUEST_ROOM=#{pd.GUEST_ROOM} 
+				</if>
+				order by GUEST_ROOM asc,DEVICE_TYPE asc ,DEVICE_ADDRESS asc
+				
+				
+	</select>
+	
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+				a.DEVICE_CODE,	
+				a.GUEST_ROOM,	
+				a.DEVICE_TYPE,
+				a.NICK_NAME,	
+				a.DEVICE_ADDRESS,	
+				a.HOSTDEVICE_ID
+		from 
+				KL_HOSTDEVICE a
+				order by a.DEVICE_ADDRESS asc
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from KL_HOSTDEVICE
+		where 
+			HOSTDEVICE_ID in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAllByCode" parameterType="String">
+		delete from KL_HOSTDEVICE
+		where 
+			DEVICE_CODE in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+</mapper>

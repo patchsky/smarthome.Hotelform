@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ResendVerificationMapper">
+	
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into KL_RESENDVERIFICATION(
+			DEVICE_CODE,	
+			DEVICE_ADDRESS,	
+			ACCEPT_STATE,	
+			COMMAND,	
+			DEVICE_TYPE,	
+			RESENDVERIFICATION_ID
+		) values (
+			#{DEVICE_CODE},	
+			#{DEVICE_ADDRESS},	
+			#{ACCEPT_STATE},	
+			#{COMMAND},	
+			#{DEVICE_TYPE},	
+			#{RESENDVERIFICATION_ID}
+		)
+	</insert>
+	
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from KL_RESENDVERIFICATION
+		where 
+			RESENDVERIFICATION_ID = #{RESENDVERIFICATION_ID}
+	</delete>
+	
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update  KL_RESENDVERIFICATION
+			set 
+				DEVICE_CODE = #{DEVICE_CODE},
+				DEVICE_ADDRESS = #{DEVICE_ADDRESS},
+				ACCEPT_STATE = #{ACCEPT_STATE},
+				COMMAND = #{COMMAND},
+				DEVICE_TYPE = #{DEVICE_TYPE},
+			RESENDVERIFICATION_ID = RESENDVERIFICATION_ID
+			where 
+				RESENDVERIFICATION_ID = #{RESENDVERIFICATION_ID}
+	</update>
+	
+	
+	<!-- 修改 -->
+	<update id="edits" parameterType="java.util.Map">
+		update  KL_RESENDVERIFICATION
+			set 
+				
+				ACCEPT_STATE = #{ACCEPT_STATE}
+				
+			where 
+				RESENDVERIFICATION_ID = #{RESENDVERIFICATION_ID}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+			DEVICE_CODE,	
+			DEVICE_ADDRESS,	
+			ACCEPT_STATE,	
+			COMMAND,	
+			DEVICE_TYPE,	
+			RESENDVERIFICATION_ID
+		from 
+			KL_RESENDVERIFICATION
+		where 
+			RESENDVERIFICATION_ID = #{RESENDVERIFICATION_ID}
+	</select>
+	
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+				a.DEVICE_CODE,	
+				a.DEVICE_ADDRESS,	
+				a.ACCEPT_STATE,	
+				a.COMMAND,	
+				a.DEVICE_TYPE,	
+				a.RESENDVERIFICATION_ID
+		from 
+				KL_RESENDVERIFICATION a
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+				a.DEVICE_CODE,	
+				a.DEVICE_ADDRESS,	
+				a.ACCEPT_STATE,	
+				a.COMMAND,	
+				a.DEVICE_TYPE,	
+				a.RESENDVERIFICATION_ID
+		from 
+				KL_RESENDVERIFICATION a
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from KL_RESENDVERIFICATION
+		where 
+			RESENDVERIFICATION_ID in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- 通过获取数据 -->
+	<select id="find" parameterType="pd" resultType="pd">
+		select 
+			DEVICE_CODE,	
+			DEVICE_ADDRESS,	
+			ACCEPT_STATE,	
+			COMMAND,	
+			DEVICE_TYPE,	
+			RESENDVERIFICATION_ID
+		from 
+			KL_RESENDVERIFICATION
+		where 
+			DEVICE_CODE = #{DEVICE_CODE} and DEVICE_ADDRESS = #{DEVICE_ADDRESS} and COMMAND = #{COMMAND}
+	</select>
+	
+	
+	<!-- 通过获取数据 -->
+	<select id="findMap" parameterType="java.util.Map" resultType="pd">
+		select 
+			DEVICE_CODE,	
+			DEVICE_ADDRESS,	
+			ACCEPT_STATE,	
+			COMMAND,	
+			DEVICE_TYPE,	
+			RESENDVERIFICATION_ID
+		from 
+			KL_RESENDVERIFICATION
+		where 
+			DEVICE_CODE = #{DEVICE_CODE} and DEVICE_ADDRESS = #{DEVICE_ADDRESS} and COMMAND = #{COMMAND}
+	</select>
+</mapper>

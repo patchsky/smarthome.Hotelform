@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ModelInfoMapper">
+	
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into KL_MODELINFO(
+			MODEL_ID,	
+			DEVICE_ADDRESS,
+			DEVICE_CODE,
+			DEVICE_TYPE,	
+			CONTROL_COMMAND,	
+			DELAY_VALUES,	
+			MODELINFO_ID
+		) values (
+			#{MODEL_ID},	
+			#{DEVICE_ADDRESS},
+			#{DEVICE_CODE},	
+			#{DEVICE_TYPE},	
+			#{CONTROL_COMMAND},	
+			#{DELAY_VALUES},	
+			#{MODELINFO_ID}
+		)
+	</insert>
+	
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from KL_MODELINFO
+		where 
+			MODELINFO_ID = #{MODELINFO_ID}
+	</delete>
+	
+	<!-- 通过情景模式ID获取数据  -->
+	<select id="getAllModelAction" parameterType="pd" resultType="pd">
+		
+			select 
+				MODEL_ID,	
+				DEVICE_ADDRESS,	
+				DEVICE_CODE,
+				DEVICE_TYPE,	
+				CONTROL_COMMAND,	
+				DELAY_VALUES,	
+				MODELINFO_ID
+		from 
+			KL_MODELINFO
+		where 
+			MODEL_ID = #{MODEL_ID}
+			
+	</select>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update  KL_MODELINFO
+			set 
+				MODEL_ID = #{MODEL_ID},
+				DEVICE_ADDRESS = #{DEVICE_ADDRESS},
+				DEVICE_TYPE = #{DEVICE_TYPE},
+				CONTROL_COMMAND = #{CONTROL_COMMAND},
+				DELAY_VALUES = #{DELAY_VALUES},
+			MODELINFO_ID = MODELINFO_ID
+			where 
+				MODELINFO_ID = #{MODELINFO_ID}
+	</update>
+	
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+			MODEL_ID,	
+			DEVICE_ADDRESS,	
+			DEVICE_TYPE,	
+			CONTROL_COMMAND,	
+			DELAY_VALUES,	
+			MODELINFO_ID
+		from 
+			KL_MODELINFO
+		where 
+			MODELINFO_ID = #{MODELINFO_ID}
+	</select>
+	
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		<!-- select
+				a.MODEL_ID,	
+				a.DEVICE_ADDRESS,	
+				a.DEVICE_TYPE,	
+				a.CONTROL_COMMAND,	
+				a.DELAY_VALUES,	
+				a.MODELINFO_ID
+		from 
+				KL_MODELINFO a -->
+		<![CDATA[
+			SELECT
+				mi.MODELINFO_ID,
+				m.NAME,
+				m.GUEST_ROOM,
+				hd.NICK_NAME,
+				mi.CONTROL_COMMAND,
+				mi.DELAY_VALUES
+			FROM
+				(
+					(
+						kl_modelinfo as mi
+						LEFT JOIN kl_model as m ON mi.MODEL_ID = m.MODEL_ID
+					)
+					LEFT JOIN kl_hostdevice as hd ON mi.DEVICE_ADDRESS = hd.DEVICE_ADDRESS
+				)
+				where 1=1
+		]]>
+		
+		<if test="pd.GUEST_ROOM != null and pd.GUEST_ROOM != ''"><!-- 角色检索 -->
+			and m.GUEST_ROOM=#{pd.GUEST_ROOM} 
+		</if>
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+				a.MODEL_ID,	
+				a.DEVICE_ADDRESS,	
+				a.DEVICE_TYPE,	
+				a.CONTROL_COMMAND,	
+				a.DELAY_VALUES,	
+				a.MODELINFO_ID
+		from 
+				KL_MODELINFO a
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from KL_MODELINFO
+		where 
+			MODELINFO_ID in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+</mapper>

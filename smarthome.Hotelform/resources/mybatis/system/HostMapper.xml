@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="HostMapper">
+	
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into KL_HOST(
+			DEVICE_CODE,
+			HOST_NUMBER,	
+			DEVICE_NAME,
+			STATUS,
+			HOST_ID
+		) values (
+			#{DEVICE_CODE},
+			#{HOST_NUMBER},	
+			#{DEVICE_NAME},	
+			#{STATUS},
+			#{HOST_ID}
+		)
+	</insert>
+	
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from KL_HOST
+		where 
+			HOST_ID = #{HOST_ID}
+	</delete>
+	
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update  KL_HOST
+			set 
+				DEVICE_CODE = #{DEVICE_CODE},
+				DEVICE_NAME = #{DEVICE_NAME},
+				STATUS = #{STATUS},
+			HOST_ID = HOST_ID
+			where 
+				HOST_ID = #{HOST_ID}
+	</update>
+	
+	<!-- 修改 -->
+	<update id="editStatus" parameterType="java.util.Map">
+		update  KL_HOST
+			set 
+				STATUS = #{STATUS}
+			where 
+				DEVICE_CODE = #{DEVICE_CODE}
+	</update>
+	
+	<!-- 修改 -->
+	<update id="editAllStatus">
+		update  KL_HOST set STATUS = 0
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+			DEVICE_CODE,
+			HOST_NUMBER,	
+			DEVICE_NAME,
+			STATUS,
+			HOST_ID
+		from 
+			KL_HOST
+		where 
+			HOST_ID = #{HOST_ID}
+	</select>
+	
+	
+	<!-- 通过主机昵称获取数据 -->
+	<select id="findByDeviceName" parameterType="pd" resultType="pd">
+		select 
+			DEVICE_CODE,	
+			DEVICE_NAME,
+			STATUS,
+			HOST_ID
+		from 
+			KL_HOST
+		where 
+			DEVICE_NAME = #{DEVICE_NAME}
+	</select>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findByDeviceCode" parameterType="java.lang.String" resultType="pd">
+		select 
+			DEVICE_CODE,	
+			DEVICE_NAME,
+			STATUS,	
+			HOST_ID
+		from 
+			KL_HOST
+		where 
+			DEVICE_CODE = #{DEVICE_CODE}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		<!-- select
+				a.DEVICE_CODE,
+				a.HOST_NUMBER,
+				a.DEVICE_NAME,
+				a.STATUS,
+				a.HOST_ID
+		from 
+				KL_HOST a where 1=1
+				<if test="pd.DEVICE_CODE != null and pd.DEVICE_CODE != ''">
+					and a.DEVICE_CODE  like  CONCAT('%',#{pd.DEVICE_CODE},'%')
+				</if>
+				<if test="pd.HOST_NUMBER != null and pd.HOST_NUMBER != ''">
+					and a.HOST_NUMBER  like  CONCAT('%',#{pd.HOST_NUMBER},'%')
+				</if>
+				order by a.HOST_NUMBER asc -->
+		<![CDATA[
+		SELECT DISTINCT
+			*
+		FROM
+			(
+				SELECT
+					a.DEVICE_CODE,
+					a.HOST_NUMBER,
+					a.DEVICE_NAME,
+					a.`STATUS`,
+					a.HOST_ID,
+					kl_hostdevice.GUEST_ROOM
+				FROM
+					kl_host a
+				LEFT JOIN kl_hostdevice ON a.DEVICE_CODE = kl_hostdevice.DEVICE_CODE
+				where 1=1 and a.DEVICE_CODE IS NOT NULL
+				]]>
+				<if test="pd.DEVICE_CODE != null and pd.DEVICE_CODE != ''">
+					and a.DEVICE_CODE  like  CONCAT('%',#{pd.DEVICE_CODE},'%')
+				</if>
+				<if test="pd.HOST_NUMBER != null and pd.HOST_NUMBER != ''">
+					and a.HOST_NUMBER  like  CONCAT('%',#{pd.HOST_NUMBER},'%')
+				</if>
+				
+				<![CDATA[) t]]>
+				
+				
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+				a.DEVICE_CODE,
+				a.HOST_NUMBER,	
+				a.DEVICE_NAME,			
+				a.STATUS,
+				a.HOST_ID
+		from 
+				KL_HOST a
+				order by a.HOST_NUMBER asc
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from KL_HOST
+		where 
+			DEVICE_CODE in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	
+	
+</mapper>
