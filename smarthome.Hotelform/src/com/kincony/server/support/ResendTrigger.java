@@ -1,4 +1,4 @@
-﻿package com.kincony.server.support;
+package com.kincony.server.support;
 
 import java.util.Iterator;
 import java.util.LinkedList;

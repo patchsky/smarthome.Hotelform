@@ -1,4 +1,4 @@
-﻿package com.kincony.server.packets;
+package com.kincony.server.packets;
 
 import java.util.HashMap;
 import java.util.Hashtable;

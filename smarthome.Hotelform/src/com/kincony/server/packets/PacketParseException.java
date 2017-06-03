@@ -1,4 +1,4 @@
-﻿/*
+/*
 * QQServer - Java QQ Client
 *
 * Copyright (C) 2004 luma <stubma@163.com>
